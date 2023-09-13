@@ -186,15 +186,19 @@ def register_commands(app):
     @click.option('--category', default=10, help='Quantity of categories, default is 10.')
     @click.option('--post', default=50, help='Quantity of posts, default is 50.')
     @click.option('--comment', default=500, help='Quantity of comments, default is 500.')
-    def forge(category, post, comment):
+    @click.option('--tag' , default=10, help = 'Quantity of tags, default is 10')
+    def forge(category, post, comment,tag):
         """Generate fake data."""
-        from bluelog.fakes import fake_admin, fake_categories, fake_posts, fake_comments, fake_links
+        from bluelog.fakes import fake_admin, fake_categories, fake_posts, fake_comments, fake_links,fake_tag
 
         db.drop_all()
         db.create_all()
 
         click.echo('Generating the administrator...')
         fake_admin()
+
+        click.echo('Generating tags...')
+        fake_tag(tag)
 
         click.echo('Generating %d categories...' % category)
         fake_categories(category)
@@ -207,6 +211,8 @@ def register_commands(app):
 
         click.echo('Generating links...')
         fake_links()
+
+
 
         click.echo('Done.')
 

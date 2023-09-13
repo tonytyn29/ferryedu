@@ -13,6 +13,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from bluelog.extensions import db
 
 
+tagging = db.Table('tagging',
+                   db.Column('photo_id', db.Integer, db.ForeignKey('post.id')),
+                   db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+                   )
+
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20))
@@ -55,6 +60,7 @@ class Post(db.Model):
 
     category = db.relationship('Category', back_populates='posts')
     comments = db.relationship('Comment', back_populates='post', cascade='all, delete-orphan')
+    tags = db.relationship('Tag', secondary=tagging, back_populates='posts')
 
 
 class Comment(db.Model):
@@ -82,3 +88,11 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     url = db.Column(db.String(255))
+
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    posts = db.relationship('Post', secondary=tagging, back_populates='tags')
+

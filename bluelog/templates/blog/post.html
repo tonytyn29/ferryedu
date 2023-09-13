@@ -22,8 +22,18 @@
         <small>
             Category: <a
                 href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a><br>
-            Date: {{ moment(post.timestamp).format('LL') }}
+            <!--why not use blog.show_category?-->
         </small>
+        <small>Tag:</small>
+        {% for tag in post.tags %}
+        <small>
+                 <a
+                href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ tag.name}},</a>
+        </small>
+        {% endfor %}
+        <br>
+        <small>Date: {{ moment(post.timestamp).format('LL') }}</small>
+
     </div>
     <div class="row">
         <div class="col-sm-8">

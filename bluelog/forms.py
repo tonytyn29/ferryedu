@@ -8,10 +8,11 @@
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, ValidationError, HiddenField, \
-    BooleanField, PasswordField
+    BooleanField, PasswordField, SelectMultipleField, widgets
+
 from wtforms.validators import DataRequired, Email, Length, Optional, URL
 
-from bluelog.models import Category
+from bluelog.models import Category,Tag
 
 
 class LoginForm(FlaskForm):
@@ -32,6 +33,8 @@ class SettingForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 60)])
     category = SelectField('Category', coerce=int, default=1)
+    tags = SelectMultipleField('Tags', coerce=int, widget=widgets.ListWidget(prefix_label=False),
+                               option_widget=widgets.CheckboxInput(), validators=[DataRequired()])
     body = CKEditorField('Body', validators=[DataRequired()])
     submit = SubmitField()
 
@@ -39,6 +42,7 @@ class PostForm(FlaskForm):
         super(PostForm, self).__init__(*args, **kwargs)
         self.category.choices = [(category.id, category.name)
                                  for category in Category.query.order_by(Category.name).all()]
+        self.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()]
 
 
 class CategoryForm(FlaskForm):

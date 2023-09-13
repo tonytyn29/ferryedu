@@ -31,6 +31,11 @@ def about():
     return render_template('blog/about.html')
 
 
+@blog_bp.route('/gre')
+def gre():
+    return render_template('blog/gre.html')
+
+
 @blog_bp.route('/category/<int:category_id>')
 def show_category(category_id):
     category = Category.query.get_or_404(category_id)
@@ -39,6 +44,9 @@ def show_category(category_id):
     pagination = Post.query.with_parent(category).order_by(Post.timestamp.desc()).paginate(page, per_page)
     posts = pagination.items
     return render_template('blog/category.html', category=category, pagination=pagination, posts=posts)
+
+
+
 
 
 @blog_bp.route('/post/<int:post_id>', methods=['GET', 'POST'])

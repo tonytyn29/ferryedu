@@ -13,7 +13,7 @@ from flask_ckeditor import upload_success, upload_fail
 
 from bluelog.extensions import db
 from bluelog.forms import SettingForm, PostForm, CategoryForm, LinkForm
-from bluelog.models import Post, Category, Comment, Link
+from bluelog.models import Post, Category, Comment, Link, Tag
 from bluelog.utils import redirect_back, allowed_file
 
 admin_bp = Blueprint('admin', __name__)
@@ -57,6 +57,11 @@ def new_post():
         body = form.body.data
         category = Category.query.get(form.category.data)
         post = Post(title=title, body=body, category=category)
+        selected_tags = form.tags.data  # This will give you a list of selected tag ids
+        for tag_id in selected_tags:
+            tag = Tag.query.get(tag_id)
+            post.tags.append(tag)  # Assuming `tags` is a relationship attribute in your Post model
+
         # same with:
         # category_id = form.category.data
         # post = Post(title=title, body=body, category_id=category_id)
