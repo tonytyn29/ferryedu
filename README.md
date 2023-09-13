@@ -2,6 +2,8 @@
 
 *A blue blog.*
 
+It's also Tony's newest project.
+
 > Example application for *[Python Web Development with Flask](https://helloflask.com/en/book/1)* (《[Flask Web 开发实战](https://helloflask.com/book/1)》).
 
 Demo: http://bluelog.helloflask.com
